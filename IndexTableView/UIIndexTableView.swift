@@ -66,7 +66,7 @@ public class UIIndexTableView: UIView, UIIndexViewDelegate {
         indexView.frame = CGRectMake(0, 0, 20, bounds.height)
         
         flotageLabel.hidden = true
-        flotageLabel.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.5)
+        flotageLabel.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.3)
         flotageLabel.textColor = UIColor.whiteColor()
         flotageLabel.font = UIFont.boldSystemFontOfSize(23)
         flotageLabel.layer.cornerRadius = 8
@@ -271,7 +271,7 @@ public class UIIndexView:UIView {
         super.touchesBegan(touches, withEvent: event)
         sendEventToDelegate(event)
         delegate?.indexTouchesBegan(self)
-        self.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.5)
+        self.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.3)
     }
     
     public override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
