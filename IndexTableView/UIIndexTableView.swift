@@ -14,16 +14,107 @@ public protocol UIIndexTableViewDelegate: UITableViewDataSource, UITableViewDele
     func titleString(section:Int)->String
 }
 
-public class UIIndexTableView: UIView {
-    public var tableView:UITableView = UITableView(frame: CGRectZero)
-    public var delegate:UIIndexTableViewDelegate?
+public class UIIndexTableView: UIView, UIIndexViewDelegate {
+    public var tableView:UITableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Grouped)
+    public var delegate:UIIndexTableViewDelegate? {
+        didSet {
+            if let delegate = self.delegate {
+                self.tableView.delegate = delegate
+                self.tableView.dataSource = delegate
+                
+                self.indexView.indexes = delegate.sectionIndexTitlesForIndexTableView(self)
+                self.indexView.reloadLayout(tableView.contentInset)
+                indexView.delegate = self
+            }
+        }
+    }
+    
+    private var flotageLabel:UILabel = UILabel(frame: CGRectZero)
+    private var indexView:UIIndexView = UIIndexView(frame: CGRectZero)
+    
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupIndexTableView()
+    }
+    
+    public required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupIndexTableView()
+    }
+    
+    private func setupIndexTableView() {
+        addSubview(tableView)
+        tableView.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(self)
+        }
+        
+        addSubview(indexView)
+        indexView.snp_makeConstraints { (make) -> Void in
+            make.trailing.equalTo(self)
+            make.top.bottom.equalTo(self)
+            make.width.equalTo(20)
+        }
+        
+        self.addSubview(flotageLabel)
+        flotageLabel.snp_makeConstraints { (make) -> Void in
+            make.width.height.equalTo(64)
+            make.center.equalTo(self)
+        }
+        flotageLabel.hidden = true
+        flotageLabel.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.9)
+        flotageLabel.textColor = UIColor.whiteColor()
+    }
+    
     
     public func reloadData() {
+        tableView.reloadData()
+        if let delegate = self.delegate {
+            indexView.indexes = delegate.sectionIndexTitlesForIndexTableView(self)
+            indexView.reloadLayout(tableView.contentInset)
+            indexView.delegate = self
+        }
     }
     
     public func hideFlotage() {
+        flotageLabel.hidden = true
     }
-
+    
+    public func didSelectSectionAtIndex(indexView: UIIndexView, index: Int, title: String) {
+        if index > -1 {
+            if let delegate = self.delegate {
+                var count = delegate.numberOfSectionsInTableView!(self.tableView)
+                for i in 0..<count {
+                    if delegate.titleString(i) == title {
+                        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: i), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+                        break
+                    }
+                }
+            }
+            flotageLabel.text = title
+        }
+    }
+    
+    public func indexTouchesBegan(indexView: UIIndexView) {
+        flotageLabel.hidden = false
+    }
+    
+    public func indexTouchesEnd(indexView: UIIndexView) {
+        var animation = CATransition()
+        animation.type = kCATransitionFade
+        animation.duration = 0.4
+        flotageLabel.layer.addAnimation(animation, forKey: nil)
+        
+        flotageLabel.hidden = true
+    }
+    
+    public func indexTitle(indexView: UIIndexView) -> [String] {
+        if let delegate = self.delegate {
+            return delegate.sectionIndexTitlesForIndexTableView(self)
+        }else {
+            return []
+        }
+    }
 }
 
 public protocol UIIndexViewDelegate:NSObjectProtocol {

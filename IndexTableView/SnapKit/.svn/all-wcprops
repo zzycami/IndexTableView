@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit
+END
+Constraint.swift
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/Constraint.swift
+END
+ConstraintMaker.swift
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/ConstraintMaker.swift
+END
+ConstraintDescription.swift
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/ConstraintDescription.swift
+END
+SnapKit.swift
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/SnapKit.swift
+END
+EdgeInsets.swift
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/EdgeInsets.swift
+END
+ConstraintAttributes.swift
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/ConstraintAttributes.swift
+END
+Debugging.swift
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/Debugging.swift
+END
+View+SnapKit.swift
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/View+SnapKit.swift
+END
+ConstraintRelation.swift
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/ConstraintRelation.swift
+END
+LayoutConstraint.swift
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/LayoutConstraint.swift
+END
+ConstraintItem.swift
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/ConstraintItem.swift
+END
+ViewController+SnapKit.swift
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/appbuilder/!svn/ver/1897/lab3/ios/trunk/lab/LabLibrary/SnapKit/ViewController+SnapKit.swift
+END
