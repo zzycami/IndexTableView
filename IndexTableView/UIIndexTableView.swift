@@ -15,7 +15,7 @@ public protocol UIIndexTableViewDelegate: UITableViewDataSource, UITableViewDele
 }
 
 public class UIIndexTableView: UIView, UIIndexViewDelegate {
-    public var tableView:UITableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Grouped)
+    public var tableView:UITableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
     public var delegate:UIIndexTableViewDelegate? {
         didSet {
             if let delegate = self.delegate {
@@ -61,9 +61,23 @@ public class UIIndexTableView: UIView, UIIndexViewDelegate {
             make.width.height.equalTo(64)
             make.center.equalTo(self)
         }
+        
+        println("x:\(frame.origin.x), y:\(frame.origin.y), width:\(frame.width), height:\(frame.height)")
+        indexView.frame = CGRectMake(0, 0, 20, bounds.height)
+        
         flotageLabel.hidden = true
-        flotageLabel.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.9)
+        flotageLabel.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.5)
         flotageLabel.textColor = UIColor.whiteColor()
+        flotageLabel.font = UIFont.boldSystemFontOfSize(23)
+        flotageLabel.layer.cornerRadius = 8
+        flotageLabel.layer.masksToBounds = true
+        flotageLabel.textAlignment = NSTextAlignment.Center
+    }
+    
+    public override func layoutSubviews() {
+        println("x:\(frame.origin.x), y:\(frame.origin.y), width:\(frame.width), height:\(frame.height)")
+        super.layoutSubviews()
+        indexView.layoutSubviews()
     }
     
     
@@ -85,8 +99,9 @@ public class UIIndexTableView: UIView, UIIndexViewDelegate {
             if let delegate = self.delegate {
                 var count = delegate.numberOfSectionsInTableView!(self.tableView)
                 for i in 0..<count {
+                    println("index:\(index), title:\(title), count:\(count)")
                     if delegate.titleString(i) == title {
-                        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: i), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+                        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: i), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
                         break
                     }
                 }
@@ -100,12 +115,12 @@ public class UIIndexTableView: UIView, UIIndexViewDelegate {
     }
     
     public func indexTouchesEnd(indexView: UIIndexView) {
-        var animation = CATransition()
-        animation.type = kCATransitionFade
-        animation.duration = 0.4
-        flotageLabel.layer.addAnimation(animation, forKey: nil)
-        
-        flotageLabel.hidden = true
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self.flotageLabel.alpha = 0
+        }) { (finished:Bool) -> Void in
+            self.flotageLabel.alpha = 1
+            self.flotageLabel.hidden = true
+        }
     }
     
     public func indexTitle(indexView: UIIndexView) -> [String] {
@@ -172,7 +187,6 @@ public class UIIndexView:UIView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setup()
     }
 
@@ -188,6 +202,18 @@ public class UIIndexView:UIView {
         shapeLayer.strokeColor = UIColor.clearColor().CGColor
         shapeLayer.strokeEnd = 1
         layer.masksToBounds = false
+        
+        backgroundColor = UIColor.clearColor()
+        if frame.height > 480 {
+            fontSize = 12
+        }else {
+            fontSize = 11
+        }
+        if self.letters.count > 0 {
+            letterHeight = self.frame.height / CGFloat(self.letters.count)
+        }else {
+            letterHeight = 0
+        }
     }
     
     public func reloadLayout(edgeInsets:UIEdgeInsets) {
@@ -201,10 +227,14 @@ public class UIIndexView:UIView {
         super.layoutSubviews()
         setup()
         
-        if !isLayout {
-            for sublayer in layer.sublayers {
-                sublayer.removeFromSuperlayer()
+        //if !isLayout {
+            if layer.sublayers != nil {
+                for sublayer in layer.sublayers {
+                    sublayer.removeFromSuperlayer()
+                }
             }
+            
+            println("x:\(frame.origin.x), y:\(frame.origin.y), width:\(frame.width), height:\(frame.height)")
             
             shapeLayer.frame = CGRectMake(0, 0, self.layer.frame.width, self.layer.frame.height)
             var bezierPath = UIBezierPath()
@@ -212,7 +242,7 @@ public class UIIndexView:UIView {
             bezierPath.addLineToPoint(CGPointMake(0, frame.size.height))
             
             for (index, letter) in enumerate(letters) {
-                var originY = CGFloat(index) * frame.height
+                var originY = CGFloat(index) * letterHeight
                 var ctl = textLayerWithSize(fontSize, text: letter, frame: CGRectMake(0, originY, frame.width, letterHeight))
                 layer.addSublayer(ctl)
                 bezierPath.moveToPoint(CGPointMake(0, originY))
@@ -222,7 +252,7 @@ public class UIIndexView:UIView {
             shapeLayer.path = bezierPath.CGPath
             layer.addSublayer(shapeLayer)
             isLayout = true
-        }
+        //}
     }
     
     public func textLayerWithSize(size:CGFloat, text:String, frame:CGRect)->CATextLayer {
@@ -241,6 +271,7 @@ public class UIIndexView:UIView {
         super.touchesBegan(touches, withEvent: event)
         sendEventToDelegate(event)
         delegate?.indexTouchesBegan(self)
+        self.backgroundColor = UIColor(red: 18/255.0, green: 29/255.0, blue: 45/255.0, alpha: 0.5)
     }
     
     public override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -250,6 +281,9 @@ public class UIIndexView:UIView {
     
     public override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         delegate?.indexTouchesEnd(self)
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self.backgroundColor = UIColor.clearColor()
+        })
     }
     
     private func sendEventToDelegate(event:UIEvent) {
